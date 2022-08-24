@@ -14,22 +14,20 @@ export default {
 	async fetch(request) {
 
 		if (request.method != 'GET') {
-			return new Response('', {status: 405})
+			return new Response('', { status: 405 })
 		}
 
 		const { searchParams } = new URL(request.url)
 
-		return this.handleRequest({
-			authorization: request.headers.get("password"),
+		const metadata = {
+			authorization: searchParams.get("password"),
 			zoneId: searchParams.get("zone_id"),
 			domainId: searchParams.get("domain_id"),
 			domainName: searchParams.get("domain_name"),
 			ip: searchParams.get("ip"),
-		})
-	},
+		}
 
-	async handleRequest(metadata) {
-		const url ="https://api.cloudflare.com/client/v4"
+		const url = "https://api.cloudflare.com/client/v4"
 			+ "/zones/" + metadata.zoneId
 			+ "/dns_records/" + metadata.domainId
 
@@ -47,7 +45,15 @@ export default {
 		}
 
 		const response = await fetch(url, init)
+		if (response.status != 200) {
+			console.log(await response.text())
+		}
 
-		return new Response(JSON.stringify(response))
+		return new Response(await response.text(), {
+			status: response.status,
+			headers: {
+				'content-type': 'application/json'
+			}
+		})
 	}
 }
