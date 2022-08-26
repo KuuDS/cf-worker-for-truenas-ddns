@@ -13,6 +13,7 @@ export default {
 
 	async fetch(request) {
 
+		//console.log(request.url)
 		if (request.method != 'GET') {
 			return new Response('', { status: 405 })
 		}
@@ -47,7 +48,7 @@ export default {
 		const response = await fetch(url, init)
 		const body = await response.text
 		if (response.status != 200) {
-			console.log(body)
+			console.log(JSON.stringify({ url, init, body }))
 		}
 
 		return new Response(body, {
