@@ -45,11 +45,12 @@ export default {
 		}
 
 		const response = await fetch(url, init)
+		const body = await response.text
 		if (response.status != 200) {
-			console.log(await response.text())
+			console.log(body)
 		}
 
-		return new Response(await response.text(), {
+		return new Response(body, {
 			status: response.status,
 			headers: {
 				'content-type': 'application/json'
