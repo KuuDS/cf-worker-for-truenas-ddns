@@ -46,7 +46,7 @@ export default {
 		}
 
 		const response = await fetch(url, init)
-		const body = await response.text
+		const body = await response.text()
 		if (response.status != 200) {
 			console.log(JSON.stringify({ url, init, body }))
 		}
